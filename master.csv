@@ -1,0 +1,31 @@
+country,year,sex,age,suicides_no,population,suicides/100k pop,country-year,HDI for year,gdp_for_year ($),gdp_per_capita ($),generation
+India,2012,male,15-24 years,12000,28000000,42.86,India-2012,0.65,1000000000000,5000,Millennial
+India,2012,female,15-24 years,6000,26000000,23.08,India-2012,0.65,1000000000000,5000,Millennial
+India,2013,male,25-34 years,13500,30000000,45.0,India-2013,0.65,1000000000000,5000,Millennial
+India,2013,female,25-34 years,6500,27500000,23.64,India-2013,0.65,1000000000000,5000,Millennial
+India,2014,male,35-54 years,15000,39000000,38.46,India-2014,0.65,1000000000000,5000,Millennial
+India,2014,female,35-54 years,7200,36000000,20.0,India-2014,0.65,1000000000000,5000,Millennial
+India,2015,male,55-74 years,11000,22000000,50.0,India-2015,0.65,1000000000000,5000,Millennial
+India,2015,female,55-74 years,5000,20000000,25.0,India-2015,0.65,1000000000000,5000,Millennial
+India,2016,male,75+ years,4500,6000000,75.0,India-2016,0.65,1000000000000,5000,Millennial
+India,2016,female,75+ years,1800,4500000,40.0,India-2016,0.65,1000000000000,5000,Millennial
+United States,2012,male,15-24 years,3500,22000000,15.91,United States-2012,0.65,1000000000000,5000,Millennial
+United States,2012,female,15-24 years,1200,21000000,5.71,United States-2012,0.65,1000000000000,5000,Millennial
+United States,2013,male,25-34 years,7000,22000000,31.82,United States-2013,0.65,1000000000000,5000,Millennial
+United States,2013,female,25-34 years,1800,21500000,8.37,United States-2013,0.65,1000000000000,5000,Millennial
+United States,2014,male,35-54 years,21000,42000000,50.0,United States-2014,0.65,1000000000000,5000,Millennial
+United States,2014,female,35-54 years,6500,43000000,15.12,United States-2014,0.65,1000000000000,5000,Millennial
+United States,2015,male,55-74 years,14000,28000000,50.0,United States-2015,0.65,1000000000000,5000,Millennial
+United States,2015,female,55-74 years,3500,30000000,11.67,United States-2015,0.65,1000000000000,5000,Millennial
+United States,2016,male,75+ years,5000,6000000,83.33,United States-2016,0.65,1000000000000,5000,Millennial
+United States,2016,female,75+ years,900,5000000,18.0,United States-2016,0.65,1000000000000,5000,Millennial
+Japan,2012,male,15-24 years,1800,7000000,25.71,Japan-2012,0.65,1000000000000,5000,Millennial
+Japan,2012,female,15-24 years,700,6500000,10.77,Japan-2012,0.65,1000000000000,5000,Millennial
+Japan,2013,male,25-34 years,3000,8000000,37.5,Japan-2013,0.65,1000000000000,5000,Millennial
+Japan,2013,female,25-34 years,1000,7500000,13.33,Japan-2013,0.65,1000000000000,5000,Millennial
+Japan,2014,male,35-54 years,9000,19000000,47.37,Japan-2014,0.65,1000000000000,5000,Millennial
+Japan,2014,female,35-54 years,3000,18000000,16.67,Japan-2014,0.65,1000000000000,5000,Millennial
+Japan,2015,male,55-74 years,10000,18000000,55.56,Japan-2015,0.65,1000000000000,5000,Millennial
+Japan,2015,female,55-74 years,3500,17000000,20.59,Japan-2015,0.65,1000000000000,5000,Millennial
+Japan,2016,male,75+ years,5000,5000000,100.0,Japan-2016,0.65,1000000000000,5000,Millennial
+Japan,2016,female,75+ years,1800,5500000,32.73,Japan-2016,0.65,1000000000000,5000,Millennial
