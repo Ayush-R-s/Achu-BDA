@@ -119,27 +119,32 @@
         \begin{column}{0.48\textwidth}
             \begin{block}{\textbf{Existing System Architecture}}
                 \begin{itemize}
-                    \item Traditional WHO and CDC health surveillance relies on \textbf{annual batch PDF/Excel releases}.
-                    \item Relies on isolated relational databases without distributed preprocessing mechanisms.
-                    \item Lack of machine learning-driven risk forecasting or scenario simulation.
+                    \item Relies on \textbf{static annual reports} (WHO, CDC) published in tabular/PDF formats.
+                    \item Standalone relational stores without distributed Big Data preprocessing.
                 \end{itemize}
             \end{block}
-            \begin{alertblock}{\textbf{Limitations of Existing Approaches}}
+            \vspace{0.1cm}
+            \begin{alertblock}{\textbf{Key Limitations}}
                 \begin{itemize}
-                    \item High processing latency on large datasets.
-                    \item Rigid schema structures; unable to handle streaming data.
-                    \item No personalized or cohort-level What-If forecasting.
+                    \item High processing latency on large-scale datasets.
+                    \item No dynamic cohort-level What-If forecasting.
                 \end{itemize}
             \end{alertblock}
         \end{column}
         \begin{column}{0.48\textwidth}
-            \begin{block}{\textbf{Literature Review \& Research Gaps}}
+            \begin{block}{\textbf{Literature Review}}
                 \begin{itemize}
-                    \item \textbf{Socio-Demographic Disparities:} Prior studies establish severe gender and age asymmetries in mortality rates.
-                    \item \textbf{Big Data Analytics in Healthcare:} Demonstrated efficacy of distributed MapReduce paradigms for epidemiological cubes.
-                    \item \textbf{Identified Gap:} Lack of unified end-to-end pipelines connecting automated Big Data preprocessing, ML classification, and real-time interactive user interfaces.
+                    \item Studies confirm strong correlation between socioeconomic status and mortality disparities.
+                    \item MapReduce proven effective for healthcare data cubes.
                 \end{itemize}
             \end{block}
+            \vspace{0.1cm}
+            \begin{exampleblock}{\textbf{Identified Gaps Addressed}}
+                \begin{itemize}
+                    \item Lack of unified end-to-end Big Data ETL pipelines.
+                    \item Absence of interactive web-based ML risk predictors.
+                \end{itemize}
+            \end{exampleblock}
         \end{column}
     \end{columns}
 \end{frame}
@@ -258,47 +263,49 @@
 % ==============================================================================
 \begin{frame}{Slide 8: Results, Benchmarks \& Performance}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
+        \begin{column}{0.52\textwidth}
             \begin{block}{\textbf{Supervised Regression Benchmarks}}
-                \begin{table}[h]
-                    \centering
-                    \scriptsize
-                    \begin{tabular}{@{}lccc@{}}
-                        \toprule
-                        \textbf{Algorithm} & \textbf{$R^2$ Score} & \textbf{RMSE} & \textbf{MAE} \\ \midrule
-                        \textbf{Decision Tree Regressor} & \textbf{0.929} & \textbf{8.10} & \textbf{5.73} \\
-                        Linear Regression & 0.813 & 13.14 & 10.53 \\
-                        Random Forest Regressor & 0.788 & 14.01 & 11.20 \\ \bottomrule
-                    \end{tabular}
-                \end{table}
+                \vspace{0.05cm}
+                \centering
+                \scriptsize
+                \begin{tabular}{@{}lccc@{}}
+                    \toprule
+                    \textbf{Algorithm} & \textbf{$R^2$} & \textbf{RMSE} & \textbf{MAE} \\ \midrule
+                    \textbf{Decision Tree} & \textbf{0.929} & \textbf{8.10} & \textbf{5.73} \\
+                    Linear Regression & 0.813 & 13.14 & 10.53 \\
+                    Random Forest & 0.788 & 14.01 & 11.20 \\ \bottomrule
+                \end{tabular}
+                \vspace{0.05cm}
             \end{block}
+            \vspace{0.15cm}
             \begin{block}{\textbf{Supervised Classification Benchmarks}}
-                \begin{table}[h]
-                    \centering
-                    \scriptsize
-                    \begin{tabular}{@{}lccc@{}}
-                        \toprule
-                        \textbf{Algorithm} & \textbf{Accuracy} & \textbf{Precision} & \textbf{F1} \\ \midrule
-                        \textbf{Decision Tree Classifier} & \textbf{87.5\%} & \textbf{0.90} & \textbf{0.87} \\
-                        Logistic Regression & 50.0\% & 0.58 & 0.48 \\
-                        Random Forest Classifier & 50.0\% & 0.55 & 0.50 \\ \bottomrule
-                    \end{tabular}
-                \end{table}
+                \vspace{0.05cm}
+                \centering
+                \scriptsize
+                \begin{tabular}{@{}lccc@{}}
+                    \toprule
+                    \textbf{Algorithm} & \textbf{Acc.} & \textbf{Prec.} & \textbf{F1} \\ \midrule
+                    \textbf{Decision Tree} & \textbf{87.5\%} & \textbf{0.90} & \textbf{0.87} \\
+                    Logistic Regression & 50.0\% & 0.58 & 0.48 \\
+                    Random Forest & 50.0\% & 0.55 & 0.50 \\ \bottomrule
+                \end{tabular}
+                \vspace{0.05cm}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.46\textwidth}
             \begin{block}{\textbf{Unsupervised Clustering \& PCA ($k=3$)}}
-                \begin{itemize}
-                    \item \textbf{PC1 \& PC2:} Account for $>65\%$ feature variance.
-                    \item \textbf{Cluster 0 (Senior High-Risk):} Peak rates ($>75/100\text{k}$).
-                    \item \textbf{Cluster 1 (Working Age):} Large aggregate case volume.
-                    \item \textbf{Cluster 2 (Youth/Female):} Lowest vulnerability baseline.
+                \begin{itemize}\setlength{\itemsep}{2pt}
+                    \item \textbf{PC1 \& PC2:} Explain $>65\%$ variance.
+                    \item \textbf{Cluster 0:} Senior high-risk ($>75$/100k).
+                    \item \textbf{Cluster 1:} Working-age, high volume.
+                    \item \textbf{Cluster 2:} Youth/Female, lowest risk.
                 \end{itemize}
             \end{block}
-            \begin{block}{\textbf{Dashboard Capabilities}}
-                \begin{itemize}
-                    \item Live What-If inference with probability charts.
-                    \item Interactive MapReduce latency: $<5\text{ ms}$.
+            \vspace{0.15cm}
+            \begin{block}{\textbf{Dashboard Performance}}
+                \begin{itemize}\setlength{\itemsep}{2pt}
+                    \item What-If prediction with probability charts.
+                    \item MapReduce execution latency: $<5\text{ ms}$.
                 \end{itemize}
             \end{block}
         \end{column}
