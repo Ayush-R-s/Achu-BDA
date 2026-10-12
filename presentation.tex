@@ -1,0 +1,522 @@
+\documentclass[10pt, aspectratio=169]{beamer}
+
+% --- THEME & STYLING ---
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+% --- PACKAGES ---
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usepackage{xcolor}
+
+% --- CUSTOM COLOR DEFINITIONS ---
+\definecolor{DeepNavy}{RGB}{15, 23, 42}
+\definecolor{AccentTeal}{RGB}{15, 118, 110}
+\definecolor{SkyBlue}{RGB}{56, 189, 248}
+\definecolor{CardBg}{RGB}{248, 250, 252}
+
+\setbeamercolor{palette primary}{bg=DeepNavy, fg=white}
+\setbeamercolor{palette secondary}{bg=AccentTeal, fg=white}
+\setbeamercolor{palette tertiary}{bg=DeepNavy!90, fg=white}
+\setbeamercolor{titlelike}{parent=palette primary}
+\setbeamercolor{structure}{fg=AccentTeal}
+\setbeamercolor{block title}{bg=DeepNavy, fg=white}
+\setbeamercolor{block body}{bg=CardBg, fg=DeepNavy}
+
+% --- METADATA ---
+\title[BDA Suicide Analytics]{Global Socio-Demographic \& Suicide Analytics}
+\subtitle{Big Data Engineering, Exploratory Analytics, and Predictive ML Pipeline}
+\author[Ayush]{Ayush}
+\institute[Dept. of CSE]{
+    Department of Computer Science \& Engineering \\
+    Course: Big Data Analytics (BDA)
+}
+\date{\today}
+
+\begin{document}
+
+% ==============================================================================
+% SLIDE 1: TITLE SLIDE
+% ==============================================================================
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+% ==============================================================================
+% SLIDE 2: AGENDA / TABLE OF CONTENTS
+% ==============================================================================
+\begin{frame}{Presentation Outline}
+    \tableofcontents
+\end{frame}
+
+% ==============================================================================
+% SECTION 1: INTRODUCTION & PROBLEM STATEMENT
+% ==============================================================================
+\section{Introduction \& Problem Statement}
+
+\begin{frame}{1. Motivation \& Problem Formulation}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Societal Context}}
+                \begin{itemize}
+                    \item Suicide is a global public health crisis influenced by socioeconomic, demographic, and mental healthcare disparities.
+                    \item Millions of records are collected worldwide, requiring scalable analytic infrastructure to identify vulnerability hot-spots.
+                \end{itemize}
+            \end{block}
+            \begin{block}{\textbf{Primary Project Objectives}}
+                \begin{itemize}
+                    \item Ingest and cleanse multi-national demographic records.
+                    \item Implement a scalable Big Data preprocessing workflow.
+                    \item Deploy predictive ML models and an interactive web interface.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Big Data Challenge}}
+                \begin{itemize}
+                    \item \textbf{High Heterogeneity:} Aggregated census cohorts across diverse geographic populations.
+                    \item \textbf{Skewed Distributions:} Extreme variations between young vs. senior age cohorts and gender distributions.
+                    \item \textbf{Intervention Latency:} Traditional reporting lags behind; predictive modeling enables proactive resource planning.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 4: THE 5 V's OF BIG DATA
+% ==============================================================================
+\begin{frame}{2. Big Data Framework: The 5 V's Perspective}
+    \begin{columns}[T]
+        \begin{column}{0.32\textwidth}
+            \begin{block}{\textbf{Volume \& Velocity}}
+                \begin{itemize}
+                    \item \textbf{Volume:} Scalable to millions of multinational demographic records over decades.
+                    \item \textbf{Velocity:} Transition from batch annual reporting to streaming surveillance.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.32\textwidth}
+            \begin{block}{\textbf{Variety \& Veracity}}
+                \begin{itemize}
+                    \item \textbf{Variety:} Structured numerical indicators, textual demographic labels, and economic metrics (GDP, HDI).
+                    \item \textbf{Veracity:} Addressing missing HDI figures, reporting anomalies, and population outliers.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.32\textwidth}
+            \begin{block}{\textbf{Value}}
+                \begin{itemize}
+                    \item Transforming raw records into actionable \textbf{Demographic Vulnerability Indexes (DVI)}.
+                    \item Stratified target intervention for healthcare policymakers.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ==============================================================================
+% SECTION 2: DATA INGESTION & PREPROCESSING
+% ==============================================================================
+\section{Data Architecture \& Preprocessing}
+
+\begin{frame}{3. Dataset Architecture \& Profiling (\texttt{master.csv})}
+    \begin{table}[h]
+        \centering
+        \small
+        \begin{tabular}{@{}llll@{}}
+            \toprule
+            \textbf{Attribute Name} & \textbf{Data Type} & \textbf{Role / Category} & \textbf{Description} \\ \midrule
+            \texttt{country} & Categorical & Geographic Dimension & Analyzed economies (India, USA, Japan) \\
+            \texttt{year} & Integer & Temporal Dimension & Timeline coverage (2012--2016) \\
+            \texttt{sex} & Categorical & Demographic Slice & Biological sex (Male, Female) \\
+            \texttt{age} & Categorical & Demographic Cohort & Bracketed (15-24, 25-34, 35-54, 55-74, 75+) \\
+            \texttt{suicides\_no} & Integer & Target / Metric & Total suicide cases within cohort \\
+            \texttt{population} & Integer & Normalization Factor & Cohort census population count \\
+            \texttt{suicides/100k} & Float & Primary Metric & Normalized rate per 100,000 population \\
+            \texttt{HDI for year} & Float & Socioeconomic Feature & Human Development Index \\
+            \texttt{gdp\_per\_capita} & Float & Economic Indicator & Gross Domestic Product per capita \\ \bottomrule
+        \end{tabular}
+    \end{table}
+    \begin{itemize}
+        \item \textbf{Schema Validation:} Complete type integrity checks, trimming redundant string formatting and punctuation symbols.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{4. Scalable Preprocessing Pipeline}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{\textbf{1. Schema Sanitization \& Cleansing}}
+                \begin{itemize}
+                    \item Stripped non-standard characters (\$, commas, parentheses).
+                    \item Standardized identifiers to uniform \texttt{snake\_case}.
+                    \item Enforced strict 64-bit float and integer type casting.
+                \end{itemize}
+            \end{block}
+            \begin{block}{\textbf{2. Missing Value Imputation}}
+                \begin{itemize}
+                    \item Evaluated missing records in socioeconomic indicators.
+                    \item Imputed using median distribution to prevent mean distortion:
+                    $$\hat{x}_{\text{imputed}} = \text{Median}(X_{\text{observed}})$$
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{block}{\textbf{3. Interquartile Range (IQR) Outlier Diagnostics}}
+                \begin{itemize}
+                    \item Computed quartile thresholds for incidence volume:
+                    $$\text{IQR} = Q_3 - Q_1$$
+                    $$\text{Lower} = \max(0, Q_1 - 1.5 \times \text{IQR}), \quad \text{Upper} = Q_3 + 1.5 \times \text{IQR}$$
+                    \item Outliers flagged for population-adjusted normalization rather than arbitrary row deletion.
+                \end{itemize}
+            \end{block}
+            \begin{block}{\textbf{4. Feature Standardization}}
+                \begin{itemize}
+                    \item Applied Z-score \texttt{StandardScaler} to numeric variables:
+                    $$z = \frac{x - \mu}{\sigma}$$
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{5. Advanced Feature Engineering \& Risk Stratification}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Calculated Rate Verification}}
+                Standardized verification of incidents per 100k:
+                $$\text{Rate}_{100k} = \left( \frac{\text{suicides\_no}}{\text{population}} \right) \times 100{,}000$$
+            \end{block}
+            \begin{block}{\textbf{Categorical Encoding}}
+                \begin{itemize}
+                    \item \textbf{Gender Flag:} $\text{is\_male} \in \{0, 1\}$
+                    \item \textbf{Age Ordinal Encoding:}
+                    $$f(\text{age}) = \begin{cases} 
+                    1, & \text{15--24 years} \\
+                    2, & \text{25--34 years} \\
+                    3, & \text{35--54 years} \\
+                    4, & \text{55--74 years} \\
+                    5, & \text{75+ years}
+                    \end{cases}$$
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Multi-Tier Risk Classification Target}}
+                Engineered a discretized supervised target variable:
+                $$\text{Risk Tier} = \begin{cases} 
+                \text{Low Risk}, & \text{Rate} < 20.0 \\
+                \text{Moderate Risk}, & 20.0 \le \text{Rate} \le 45.0 \\
+                \text{High Risk}, & \text{Rate} > 45.0
+                \end{cases}$$
+            \end{block}
+            \begin{block}{\textbf{Feature Matrix Preparation}}
+                \begin{itemize}
+                    \item Full nominal expansion via \texttt{OneHotEncoder} across country and demographic dimensions.
+                    \item Separate splits for regression ($y \in \mathbb{R}$) and classification ($y \in \{0, 1, 2\}$).
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ==============================================================================
+% SECTION 3: BIG DATA MAPREDUCE ARCHITECTURE
+% ==============================================================================
+\section{Big Data MapReduce Simulation}
+
+\begin{frame}{6. Distributed Big Data MapReduce Processing}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{\textbf{Distributed Aggregation Paradigm}}
+                \begin{enumerate}
+                    \item \textbf{Map Phase:} Input splits are processed in chunks. Emits key-value pairs:
+                    $$\text{Key} = (\text{Country}, \text{Sex})$$
+                    $$\text{Value} = (\text{Suicides}, \text{Population}, 1)$$
+                    \item \textbf{Shuffle \& Sort:} Partitions and groups intermediate key-value lists across workers.
+                    \item \textbf{Reduce Phase:} Aggregates total volume and computes localized weighted rates:
+                    $$\text{Rate}_{\text{partition}} = \frac{\sum \text{Suicides}}{\sum \text{Population}} \times 100{,}000$$
+                \end{enumerate}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Performance \& Benchmarks}}
+                \begin{itemize}
+                    \item \textbf{Configurable Chunks:} Chunks of size 5, 10, or 15 records.
+                    \item \textbf{Scalable Throughput:} Near-zero latency ($< 5\text{ ms}$) with linear scalability to gigabyte-scale datasets.
+                    \item \textbf{Resilience:} Stateless chunk mapping allows distributed fault tolerance.
+                \end{itemize}
+            \end{block}
+            \begin{exampleblock}{\textbf{Output Schema}}
+                \texttt{[country, sex, total\_suicides, total\_population, suicide\_rate\_per\_100k]}
+            \end{exampleblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ==============================================================================
+% SECTION 4: EXPLORATORY DATA ANALYTICS (EDA)
+% ==============================================================================
+\section{Exploratory Big Data Analytics}
+
+\begin{frame}{7. Exploratory Big Data Analytics \& OLAP Slicing}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{\textbf{Multi-Dimensional OLAP Cubes}}
+                \begin{itemize}
+                    \item \textbf{Rollup Dimensions:} Country $\times$ Year $\times$ Age Bracket $\times$ Biological Sex.
+                    \item Interactive slice-and-dice queries implemented dynamically.
+                \end{itemize}
+            \end{block}
+            \begin{block}{\textbf{Demographic Vulnerability Index (DVI)}}
+                \begin{itemize}
+                    \item Normalized score ($0 - 100$) ranking cohort vulnerability:
+                    $$\text{DVI}_i = \left( \frac{\text{Rate}_i}{\max(\text{Rate})} \right) \times 100$$
+                    \item Highest index observed in senior demographic tiers.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Key Empirical Findings}}
+                \begin{itemize}
+                    \item \textbf{Extreme Senior Risk:} Cohorts aged $75+$ years exhibit peaks reaching up to $100.0$ per 100k population.
+                    \item \textbf{Persistent Gender Asymmetry:} Male mortality rates exceed female rates by a factor of $2.5\times$ to $4\times$ across all nations.
+                    \item \textbf{Temporal Consistency:} Rates exhibited structural stability between 2012 and 2016.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ==============================================================================
+% SECTION 5: MACHINE LEARNING APPLICATIONS
+% ==============================================================================
+\section{Machine Learning Applications}
+
+\begin{frame}{8. Supervised Regression: Suicide Rate Prediction}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{\textbf{Formulation \& Objective}}
+                Predict continuous suicide incidence rate $\hat{y} \in \mathbb{R}^+$ based on encoded socioeconomic and demographic features $X$:
+                $$\hat{y} = f(X_{\text{country}}, X_{\text{demographic}}, X_{\text{economic}})$$
+            \end{block}
+            \begin{block}{\textbf{Evaluation Metrics}}
+                \begin{itemize}
+                    \item \textbf{Coefficient of Determination ($R^2$):}
+                    $$R^2 = 1 - \frac{\sum (y_i - \hat{y}_i)^2}{\sum (y_i - \bar{y})^2}$$
+                    \item \textbf{Root Mean Squared Error (RMSE):}
+                    $$\text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^n (y_i - \hat{y}_i)^2}$$
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Model Benchmark Results}}
+                \begin{table}[h]
+                    \centering
+                    \small
+                    \begin{tabular}{@{}lccc@{}}
+                        \toprule
+                        \textbf{Algorithm} & \textbf{$R^2$ Score} & \textbf{RMSE} & \textbf{MAE} \\ \midrule
+                        \textbf{Decision Tree Regressor} & \textbf{0.929} & \textbf{8.10} & \textbf{5.73} \\
+                        Linear Regression & 0.813 & 13.14 & 10.53 \\
+                        Random Forest Regressor & 0.788 & 14.01 & 11.20 \\ \bottomrule
+                    \end{tabular}
+                \end{table}
+            \end{block}
+            \begin{exampleblock}{\textbf{Insight}}
+                Decision Trees captured non-linear threshold effects of senior age brackets with highest precision.
+            \end{exampleblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{9. Supervised Classification: Risk Tier Categorization}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{\textbf{Formulation \& Target Classes}}
+                Categorize demographic cohort into 3 discrete risk tiers:
+                $$C \in \{\text{Low Risk},\, \text{Moderate Risk},\, \text{High Risk}\}$$
+                Optimized using Cross-Entropy Loss:
+                $$\mathcal{L} = -\sum_{k=1}^K y_k \log(\hat{p}_k)$$
+            \end{block}
+            \begin{block}{\textbf{Evaluation Metrics}}
+                \begin{itemize}
+                    \item Accuracy, Precision, Recall, and Weighted F1-Score:
+                    $$\text{F1} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$$
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Classifier Performance Benchmarking}}
+                \begin{table}[h]
+                    \centering
+                    \small
+                    \begin{tabular}{@{}lccc@{}}
+                        \toprule
+                        \textbf{Algorithm} & \textbf{Accuracy} & \textbf{Precision} & \textbf{F1} \\ \midrule
+                        \textbf{Decision Tree Classifier} & \textbf{87.5\%} & \textbf{0.90} & \textbf{0.87} \\
+                        Logistic Regression & 50.0\% & 0.58 & 0.48 \\
+                        Random Forest Classifier & 50.0\% & 0.55 & 0.50 \\ \bottomrule
+                    \end{tabular}
+                \end{table}
+            \end{block}
+            \begin{exampleblock}{\textbf{Confusion Matrix Analysis}}
+                Decision Tree showed high diagonal concentration, correctly isolating high-risk cohorts with zero false negatives on severe cases.
+            \end{exampleblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{10. Unsupervised ML: K-Means Clustering \& 2D PCA}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{\textbf{K-Means Clustering Formulation}}
+                Partition $n$ demographic observations into $k$ clusters minimizing intra-cluster variance:
+                $$\arg\min_S \sum_{i=1}^k \sum_{x \in S_i} \| x - \mu_i \|^2$$
+                Evaluated across $k \in \{2, 3, 4\}$.
+            \end{block}
+            \begin{block}{\textbf{Dimensionality Reduction (2D PCA)}}
+                \begin{itemize}
+                    \item Projects multi-hot demographic vectors into 2 principal components.
+                    \item PC1 \& PC2 capture over \textbf{65\%} of cumulative feature variance for planar visualization.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Derived Cluster Profiles ($k=3$)}}
+                \begin{itemize}
+                    \item \textbf{Cluster 0 (High-Vulnerability Senior):}
+                    Cohorts aged 75+, highest rates/100k, predominantly male.
+                    \item \textbf{Cluster 1 (High-Volume Working Cohort):}
+                    Ages 25--54, high absolute incident counts due to population scale.
+                    \item \textbf{Cluster 2 (Low-Risk Youth \& Female):}
+                    Ages 15--24 and female demographics with lowest rates/100k.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ==============================================================================
+% SECTION 6: STREAMLIT DASHBOARD PLATFORM
+% ==============================================================================
+\section{Streamlit Dashboard Platform}
+
+\begin{frame}{11. Interactive Streamlit Dashboard Architecture}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{\textbf{Platform Architecture}}
+                \begin{itemize}
+                    \item \textbf{Modern UI:} Glassmorphic cards, custom gradient metrics, and responsive sidebar navigation.
+                    \item \textbf{Plotly Visualizations:} Interactive line trends, donut charts, heatmaps, scatter plots, and confusion matrices.
+                    \item \textbf{Live MapReduce Studio:} Interactive chunk size selection and benchmark execution.
+                \end{itemize}
+            \end{block}
+            \begin{block}{\textbf{Real-Time What-If Prediction Engine}}
+                \begin{itemize}
+                    \item User selects Country, Sex, Age Bracket, Year, and Population.
+                    \item Instant model inference producing rate, total cases, and visual risk badge.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{The 7 Dashboard Sections}}
+                \begin{enumerate}
+                    \item \textbf{Overview \& KPIs:} Executive summary cards.
+                    \item \textbf{BDA Preprocessing:} Pipeline, profiling, and MapReduce.
+                    \item \textbf{Exploratory Analytics:} Dynamic filters and OLAP.
+                    \item \textbf{ML Supervised Models:} Regression and classification.
+                    \item \textbf{Unsupervised Clustering:} PCA projection and profiles.
+                    \item \textbf{What-If Predictor:} Live inference playground.
+                    \item \textbf{BDA Documentation:} Reports and CSV data export.
+                \end{enumerate}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ==============================================================================
+% SECTION 7: CONCLUSIONS & FUTURE WORK
+% ==============================================================================
+\section{Conclusions \& Future Scope}
+
+\begin{frame}{12. Key Conclusions \& Public Health Insights}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{\textbf{Key Project Takeaways}}
+                \begin{itemize}
+                    \item \textbf{End-to-End BDA Execution:} Successfully unified data ingestion, schema profiling, MapReduce simulation, and ML.
+                    \item \textbf{Predictive Efficacy:} Decision Tree algorithms demonstrated high predictive performance ($R^2 = 0.929$, Accuracy $= 87.5\%$).
+                    \item \textbf{Full Deployment:} Packaged into an interactive web dashboard running locally and deployable to cloud.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Actionable Policy Recommendations}}
+                \begin{itemize}
+                    \item \textbf{Senior Citizen Focus:} Prioritize mental healthcare screening and social support programs for seniors ($75+$ years).
+                    \item \textbf{Targeted Male Interventions:} Develop stigma-free mental health support aimed at working-age males.
+                    \item \textbf{Regional Resource Allocation:} Deploy crisis intervention teams tailored to demographic risk tiers.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{13. Future Enhancements for Big Data Scale}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{\textbf{1. Apache Spark \& Hadoop Deployment}}
+                \begin{itemize}
+                    \item Scale pipeline to hundreds of millions of records using PySpark RDDs and DataFrames.
+                    \item Deploy on Hadoop YARN / AWS EMR cluster.
+                \end{itemize}
+            \end{block}
+            \begin{block}{\textbf{2. Streaming Ingestion Pipeline}}
+                \begin{itemize}
+                    \item Implement Apache Kafka for real-time ingestion of hospital and helpline incident logs.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{3. Advanced Multimodal ML / Deep Learning}}
+                \begin{itemize}
+                    \item Integrate NLP models (BERT, RoBERTa) to analyze public social media sentiment and helpline call transcripts.
+                    \item Graph Neural Networks (GNNs) for modeling socioeconomic contagion effects.
+                \end{itemize}
+            \end{block}
+            \begin{block}{\textbf{4. Continuous MLOps Lifecycle}}
+                \begin{itemize}
+                    \item Automated model retraining with MLflow and drift detection.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 14: THANK YOU & Q&A
+% ==============================================================================
+\begin{frame}[plain]
+    \begin{center}
+        \vspace{1.5cm}
+        {\Huge \textbf{\textcolor{DeepNavy}{Thank You!}}}
+        
+        \vspace{0.8cm}
+        {\Large \textbf{Questions \& Discussion}}
+        
+        \vspace{1.2cm}
+        \begin{tabular}{rl}
+            \textbf{Project Repository:} & \url{https://github.com/Ayush-R-s/Achu-BDA} \\
+            \textbf{Interactive Dashboard:} & Streamlit Cloud / \texttt{http://localhost:8501} \\
+            \textbf{Course:} & Big Data Analytics (BDA)
+        \end{tabular}
+    \end{center}
+\end{frame}
+
+\end{document}
