@@ -28,60 +28,53 @@
 \setbeamercolor{block title}{bg=DeepNavy, fg=white}
 \setbeamercolor{block body}{bg=CardBg, fg=DeepNavy}
 
-% --- METADATA ---
+% --- PRESENTATION METADATA ---
 \title[BDA Suicide Analytics]{Global Socio-Demographic \& Suicide Analytics}
 \subtitle{Big Data Engineering, Exploratory Analytics, and Predictive ML Pipeline}
-\author[Ayush]{Ayush}
+\author[Ayush]{
+    \textbf{Team Members:} Ayush \\
+    \vspace{0.15cm}
+    \small \textbf{Project Guide:} Faculty Mentor / Guide
+}
 \institute[Dept. of CSE]{
     Department of Computer Science \& Engineering \\
-    Course: Big Data Analytics (BDA)
+    Course: Big Data Analytics (BDA) --- Academic Year 2025--2026
 }
 \date{\today}
 
 \begin{document}
 
 % ==============================================================================
-% SLIDE 1: TITLE SLIDE
+% SLIDE 1: TITLE, TEAM MEMBERS AND GUIDE
 % ==============================================================================
 \begin{frame}[plain]
     \titlepage
 \end{frame}
 
 % ==============================================================================
-% SLIDE 2: AGENDA / TABLE OF CONTENTS
+% SLIDE 2: PROBLEM STATEMENT AND MOTIVATION
 % ==============================================================================
-\begin{frame}{Presentation Outline}
-    \tableofcontents
-\end{frame}
-
-% ==============================================================================
-% SECTION 1: INTRODUCTION & PROBLEM STATEMENT
-% ==============================================================================
-\section{Introduction \& Problem Statement}
-
-\begin{frame}{1. Motivation \& Problem Formulation}
+\begin{frame}{Slide 2: Problem Statement \& Motivation}
     \begin{columns}[T]
         \begin{column}{0.48\textwidth}
-            \begin{block}{\textbf{Societal Context}}
+            \begin{block}{\textbf{Problem Statement}}
                 \begin{itemize}
-                    \item Suicide is a global public health crisis influenced by socioeconomic, demographic, and mental healthcare disparities.
-                    \item Millions of records are collected worldwide, requiring scalable analytic infrastructure to identify vulnerability hot-spots.
-                \end{itemize}
-            \end{block}
-            \begin{block}{\textbf{Primary Project Objectives}}
-                \begin{itemize}
-                    \item Ingest and cleanse multi-national demographic records.
-                    \item Implement a scalable Big Data preprocessing workflow.
-                    \item Deploy predictive ML models and an interactive web interface.
+                    \item Suicide is a multifaceted global crisis with profound socio-demographic roots.
+                    \item Traditional public health reporting relies on \textbf{static, retrospective census tables} that fail to:
+                    \begin{itemize}
+                        \item Scale across heterogeneous multi-national cohorts.
+                        \item Dynamically identify cross-demographic vulnerability disparities.
+                        \item Provide proactive, real-time predictive risk assessment.
+                    \end{itemize}
                 \end{itemize}
             \end{block}
         \end{column}
         \begin{column}{0.48\textwidth}
-            \begin{block}{\textbf{Big Data Challenge}}
+            \begin{block}{\textbf{Motivation}}
                 \begin{itemize}
-                    \item \textbf{High Heterogeneity:} Aggregated census cohorts across diverse geographic populations.
-                    \item \textbf{Skewed Distributions:} Extreme variations between young vs. senior age cohorts and gender distributions.
-                    \item \textbf{Intervention Latency:} Traditional reporting lags behind; predictive modeling enables proactive resource planning.
+                    \item \textbf{Preventable Loss of Life:} Suicide mortality can be mitigated with timely, targeted public health interventions.
+                    \item \textbf{Big Data Opportunity:} Leveraging demographic, economic (GDP), and development (HDI) features allows automated prioritization of vulnerable cohorts.
+                    \item \textbf{Actionable Delivery:} Bridging complex statistical learning with an accessible, interactive web dashboard.
                 \end{itemize}
             \end{block}
         \end{column}
@@ -89,236 +82,187 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 4: THE 5 V's OF BIG DATA
+% SLIDE 3: OBJECTIVES
 % ==============================================================================
-\begin{frame}{2. Big Data Framework: The 5 V's Perspective}
-    \begin{columns}[T]
-        \begin{column}{0.32\textwidth}
-            \begin{block}{\textbf{Volume \& Velocity}}
-                \begin{itemize}
-                    \item \textbf{Volume:} Scalable to millions of multinational demographic records over decades.
-                    \item \textbf{Velocity:} Transition from batch annual reporting to streaming surveillance.
-                \end{itemize}
-            \end{block}
-        \end{column}
-        \begin{column}{0.32\textwidth}
-            \begin{block}{\textbf{Variety \& Veracity}}
-                \begin{itemize}
-                    \item \textbf{Variety:} Structured numerical indicators, textual demographic labels, and economic metrics (GDP, HDI).
-                    \item \textbf{Veracity:} Addressing missing HDI figures, reporting anomalies, and population outliers.
-                \end{itemize}
-            \end{block}
-        \end{column}
-        \begin{column}{0.32\textwidth}
-            \begin{block}{\textbf{Value}}
-                \begin{itemize}
-                    \item Transforming raw records into actionable \textbf{Demographic Vulnerability Indexes (DVI)}.
-                    \item Stratified target intervention for healthcare policymakers.
-                \end{itemize}
-            \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-% ==============================================================================
-% SECTION 2: DATA INGESTION & PREPROCESSING
-% ==============================================================================
-\section{Data Architecture \& Preprocessing}
-
-\begin{frame}{3. Dataset Architecture \& Profiling (\texttt{master.csv})}
-    \begin{table}[h]
-        \centering
-        \small
-        \begin{tabular}{@{}llll@{}}
-            \toprule
-            \textbf{Attribute Name} & \textbf{Data Type} & \textbf{Role / Category} & \textbf{Description} \\ \midrule
-            \texttt{country} & Categorical & Geographic Dimension & Analyzed economies (India, USA, Japan) \\
-            \texttt{year} & Integer & Temporal Dimension & Timeline coverage (2012--2016) \\
-            \texttt{sex} & Categorical & Demographic Slice & Biological sex (Male, Female) \\
-            \texttt{age} & Categorical & Demographic Cohort & Bracketed (15-24, 25-34, 35-54, 55-74, 75+) \\
-            \texttt{suicides\_no} & Integer & Target / Metric & Total suicide cases within cohort \\
-            \texttt{population} & Integer & Normalization Factor & Cohort census population count \\
-            \texttt{suicides/100k} & Float & Primary Metric & Normalized rate per 100,000 population \\
-            \texttt{HDI for year} & Float & Socioeconomic Feature & Human Development Index \\
-            \texttt{gdp\_per\_capita} & Float & Economic Indicator & Gross Domestic Product per capita \\ \bottomrule
-        \end{tabular}
-    \end{table}
-    \begin{itemize}
-        \item \textbf{Schema Validation:} Complete type integrity checks, trimming redundant string formatting and punctuation symbols.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{4. Scalable Preprocessing Pipeline}
+\begin{frame}{Slide 3: Project Objectives}
     \begin{columns}[T]
         \begin{column}{0.5\textwidth}
-            \begin{block}{\textbf{1. Schema Sanitization \& Cleansing}}
-                \begin{itemize}
-                    \item Stripped non-standard characters (\$, commas, parentheses).
-                    \item Standardized identifiers to uniform \texttt{snake\_case}.
-                    \item Enforced strict 64-bit float and integer type casting.
-                \end{itemize}
-            \end{block}
-            \begin{block}{\textbf{2. Missing Value Imputation}}
-                \begin{itemize}
-                    \item Evaluated missing records in socioeconomic indicators.
-                    \item Imputed using median distribution to prevent mean distortion:
-                    $$\hat{x}_{\text{imputed}} = \text{Median}(X_{\text{observed}})$$
-                \end{itemize}
-            \end{block}
-        \end{column}
-        \begin{column}{0.5\textwidth}
-            \begin{block}{\textbf{3. Interquartile Range (IQR) Outlier Diagnostics}}
-                \begin{itemize}
-                    \item Computed quartile thresholds for incidence volume:
-                    $$\text{IQR} = Q_3 - Q_1$$
-                    $$\text{Lower} = \max(0, Q_1 - 1.5 \times \text{IQR}), \quad \text{Upper} = Q_3 + 1.5 \times \text{IQR}$$
-                    \item Outliers flagged for population-adjusted normalization rather than arbitrary row deletion.
-                \end{itemize}
-            \end{block}
-            \begin{block}{\textbf{4. Feature Standardization}}
-                \begin{itemize}
-                    \item Applied Z-score \texttt{StandardScaler} to numeric variables:
-                    $$z = \frac{x - \mu}{\sigma}$$
-                \end{itemize}
-            \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{5. Advanced Feature Engineering \& Risk Stratification}
-    \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
-            \begin{block}{\textbf{Calculated Rate Verification}}
-                Standardized verification of incidents per 100k:
-                $$\text{Rate}_{100k} = \left( \frac{\text{suicides\_no}}{\text{population}} \right) \times 100{,}000$$
-            \end{block}
-            \begin{block}{\textbf{Categorical Encoding}}
-                \begin{itemize}
-                    \item \textbf{Gender Flag:} $\text{is\_male} \in \{0, 1\}$
-                    \item \textbf{Age Ordinal Encoding:}
-                    $$f(\text{age}) = \begin{cases} 
-                    1, & \text{15--24 years} \\
-                    2, & \text{25--34 years} \\
-                    3, & \text{35--54 years} \\
-                    4, & \text{55--74 years} \\
-                    5, & \text{75+ years}
-                    \end{cases}$$
-                \end{itemize}
-            \end{block}
-        \end{column}
-        \begin{column}{0.48\textwidth}
-            \begin{block}{\textbf{Multi-Tier Risk Classification Target}}
-                Engineered a discretized supervised target variable:
-                $$\text{Risk Tier} = \begin{cases} 
-                \text{Low Risk}, & \text{Rate} < 20.0 \\
-                \text{Moderate Risk}, & 20.0 \le \text{Rate} \le 45.0 \\
-                \text{High Risk}, & \text{Rate} > 45.0
-                \end{cases}$$
-            \end{block}
-            \begin{block}{\textbf{Feature Matrix Preparation}}
-                \begin{itemize}
-                    \item Full nominal expansion via \texttt{OneHotEncoder} across country and demographic dimensions.
-                    \item Separate splits for regression ($y \in \mathbb{R}$) and classification ($y \in \{0, 1, 2\}$).
-                \end{itemize}
-            \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-% ==============================================================================
-% SECTION 3: BIG DATA MAPREDUCE ARCHITECTURE
-% ==============================================================================
-\section{Big Data MapReduce Simulation}
-
-\begin{frame}{6. Distributed Big Data MapReduce Processing}
-    \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-            \begin{block}{\textbf{Distributed Aggregation Paradigm}}
+            \begin{block}{\textbf{Primary Engineering Objectives}}
                 \begin{enumerate}
-                    \item \textbf{Map Phase:} Input splits are processed in chunks. Emits key-value pairs:
-                    $$\text{Key} = (\text{Country}, \text{Sex})$$
-                    $$\text{Value} = (\text{Suicides}, \text{Population}, 1)$$
-                    \item \textbf{Shuffle \& Sort:} Partitions and groups intermediate key-value lists across workers.
-                    \item \textbf{Reduce Phase:} Aggregates total volume and computes localized weighted rates:
-                    $$\text{Rate}_{\text{partition}} = \frac{\sum \text{Suicides}}{\sum \text{Population}} \times 100{,}000$$
+                    \item \textbf{Scalable Data Preprocessing:} Design an automated pipeline for schema normalization, missing value imputation, and Interquartile Range (IQR) outlier diagnostics.
+                    \item \textbf{Distributed Computing Simulation:} Implement a Big Data \textbf{MapReduce} architecture demonstrating partitioned Map, Shuffle \& Sort, and Reduce aggregations.
                 \end{enumerate}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
-            \begin{block}{\textbf{Performance \& Benchmarks}}
-                \begin{itemize}
-                    \item \textbf{Configurable Chunks:} Chunks of size 5, 10, or 15 records.
-                    \item \textbf{Scalable Throughput:} Near-zero latency ($< 5\text{ ms}$) with linear scalability to gigabyte-scale datasets.
-                    \item \textbf{Resilience:} Stateless chunk mapping allows distributed fault tolerance.
-                \end{itemize}
-            \end{block}
-            \begin{exampleblock}{\textbf{Output Schema}}
-                \texttt{[country, sex, total\_suicides, total\_population, suicide\_rate\_per\_100k]}
-            \end{exampleblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-% ==============================================================================
-% SECTION 4: EXPLORATORY DATA ANALYTICS (EDA)
-% ==============================================================================
-\section{Exploratory Big Data Analytics}
-
-\begin{frame}{7. Exploratory Big Data Analytics \& OLAP Slicing}
-    \begin{columns}[T]
         \begin{column}{0.5\textwidth}
-            \begin{block}{\textbf{Multi-Dimensional OLAP Cubes}}
-                \begin{itemize}
-                    \item \textbf{Rollup Dimensions:} Country $\times$ Year $\times$ Age Bracket $\times$ Biological Sex.
-                    \item Interactive slice-and-dice queries implemented dynamically.
-                \end{itemize}
-            \end{block}
-            \begin{block}{\textbf{Demographic Vulnerability Index (DVI)}}
-                \begin{itemize}
-                    \item Normalized score ($0 - 100$) ranking cohort vulnerability:
-                    $$\text{DVI}_i = \left( \frac{\text{Rate}_i}{\max(\text{Rate})} \right) \times 100$$
-                    \item Highest index observed in senior demographic tiers.
-                \end{itemize}
-            \end{block}
-        \end{column}
-        \begin{column}{0.48\textwidth}
-            \begin{block}{\textbf{Key Empirical Findings}}
-                \begin{itemize}
-                    \item \textbf{Extreme Senior Risk:} Cohorts aged $75+$ years exhibit peaks reaching up to $100.0$ per 100k population.
-                    \item \textbf{Persistent Gender Asymmetry:} Male mortality rates exceed female rates by a factor of $2.5\times$ to $4\times$ across all nations.
-                    \item \textbf{Temporal Consistency:} Rates exhibited structural stability between 2012 and 2016.
-                \end{itemize}
+            \begin{block}{\textbf{Machine Learning \& Deployment Objectives}}
+                \begin{enumerate}
+                    \setcounter{enumi}{2}
+                    \item \textbf{Predictive ML Suite:} Train and benchmark:
+                    \begin{itemize}
+                        \item \textbf{Supervised Regression:} Predict continuous suicide rates per 100k.
+                        \item \textbf{Supervised Classification:} Categorize cohorts into 3 risk tiers (\textit{Low, Moderate, High}).
+                        \item \textbf{Unsupervised Clustering:} K-Means and 2D PCA for demographic segmentation.
+                    \end{itemize}
+                    \item \textbf{Interactive Dashboard:} Deploy a full-stack Streamlit web application with real-time \textit{What-If} scenario prediction.
+                \end{enumerate}
             \end{block}
         \end{column}
     \end{columns}
 \end{frame}
 
 % ==============================================================================
-% SECTION 5: MACHINE LEARNING APPLICATIONS
+% SLIDE 4: EXISTING SYSTEM / LITERATURE REVIEW
 % ==============================================================================
-\section{Machine Learning Applications}
+\begin{frame}{Slide 4: Existing System \& Literature Review}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Existing System Architecture}}
+                \begin{itemize}
+                    \item Traditional WHO and CDC health surveillance relies on \textbf{annual batch PDF/Excel releases}.
+                    \item Relies on isolated relational databases without distributed preprocessing mechanisms.
+                    \item Lack of machine learning-driven risk forecasting or scenario simulation.
+                \end{itemize}
+            \end{block}
+            \begin{alertblock}{\textbf{Limitations of Existing Approaches}}
+                \begin{itemize}
+                    \item High processing latency on large datasets.
+                    \item Rigid schema structures; unable to handle streaming data.
+                    \item No personalized or cohort-level What-If forecasting.
+                \end{itemize}
+            \end{alertblock}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Literature Review \& Research Gaps}}
+                \begin{itemize}
+                    \item \textbf{Socio-Demographic Disparities:} Prior studies establish severe gender and age asymmetries in mortality rates.
+                    \item \textbf{Big Data Analytics in Healthcare:} Demonstrated efficacy of distributed MapReduce paradigms for epidemiological cubes.
+                    \item \textbf{Identified Gap:} Lack of unified end-to-end pipelines connecting automated Big Data preprocessing, ML classification, and real-time interactive user interfaces.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
 
-\begin{frame}{8. Supervised Regression: Suicide Rate Prediction}
+% ==============================================================================
+% SLIDE 5: PROPOSED SYSTEM AND METHODOLOGY
+% ==============================================================================
+\begin{frame}{Slide 5: Proposed System \& Methodology}
     \begin{columns}[T]
         \begin{column}{0.5\textwidth}
-            \begin{block}{\textbf{Formulation \& Objective}}
-                Predict continuous suicide incidence rate $\hat{y} \in \mathbb{R}^+$ based on encoded socioeconomic and demographic features $X$:
-                $$\hat{y} = f(X_{\text{country}}, X_{\text{demographic}}, X_{\text{economic}})$$
+            \begin{block}{\textbf{Methodological Framework}}
+                \begin{enumerate}
+                    \item \textbf{Phase 1: Ingestion \& Profiling} \\
+                    Ingest multi-country records (\texttt{master.csv}); validate data types, memory footprint, and null counts.
+                    \item \textbf{Phase 2: Cleaning \& Transformation} \\
+                    Standardize column naming; apply median imputation for socioeconomic indicators ($\hat{x}_{\text{HDI}} = \text{Median}(X)$); compute IQR boundaries for outlier diagnostics.
+                    \item \textbf{Phase 3: Feature Engineering} \\
+                    Derive normalized rate: $\text{Rate}_{100k} = (\frac{\text{Cases}}{\text{Pop}}) \times 10^5$; map age ordinally; assign 3-tier risk labels.
+                \end{enumerate}
             \end{block}
-            \begin{block}{\textbf{Evaluation Metrics}}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{block}{\textbf{Analytical \& Modeling Methodology}}
+                \begin{enumerate}
+                    \setcounter{enumi}{3}
+                    \item \textbf{Phase 4: Distributed Processing} \\
+                    Chunk-based MapReduce simulation for group-level rate aggregations.
+                    \item \textbf{Phase 5: Predictive ML Training} \\
+                    Multi-model regression and classification with train/test validation (75:25) and feature scaling (\texttt{StandardScaler}).
+                    \item \textbf{Phase 6: Interactive Deployment} \\
+                    Streamlit interface with Plotly graphics and live What-If predictive simulation.
+                \end{enumerate}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 6: SYSTEM ARCHITECTURE / WORKFLOW / DESIGN
+% ==============================================================================
+\begin{frame}{Slide 6: System Architecture \& Workflow Design}
+    \centering
+    \begin{tikzpicture}[node distance=1.1cm, auto,
+        block/.style={rectangle, draw=DeepNavy, fill=CardBg, text=DeepNavy, text width=2.4cm, text centered, rounded corners, minimum height=1.1cm, font=\scriptsize\bfseries},
+        accent/.style={rectangle, draw=AccentTeal, fill=AccentTeal!15, text=AccentTeal, text width=2.4cm, text centered, rounded corners, minimum height=1.1cm, font=\scriptsize\bfseries},
+        line/.style={draw=DeepNavy, -latex', line width=1pt}]
+        
+        % Nodes
+        \node [block] (raw) {Raw Data Ingestion\\(\texttt{master.csv})};
+        \node [accent, right=0.7cm of raw] (clean) {Data Cleansing \&\\IQR Outlier Bounds};
+        \node [block, right=0.7cm of clean] (feat) {Feature Engineering\\\& Standardization};
+        \node [accent, right=0.7cm of feat] (mr) {MapReduce\\Distributed Aggregation};
+        
+        \node [block, below=1.2cm of feat] (ml) {Machine Learning Suite\\(Reg / Clf / Cluster)};
+        \node [accent, right=0.7cm of ml] (dash) {Streamlit Dashboard\\\& What-If Predictor};
+        \node [block, left=0.7cm of ml] (olap) {Exploratory Analytics\\\& OLAP Cubes};
+        
+        % Paths
+        \path [line] (raw) -- (clean);
+        \path [line] (clean) -- (feat);
+        \path [line] (feat) -- (mr);
+        \path [line] (feat) -- (ml);
+        \path [line] (feat) -- (olap);
+        \path [line] (ml) -- (dash);
+        \path [line] (mr) |- (dash);
+        \path [line] (olap) -- (ml);
+    \end{tikzpicture}
+    
+    \vspace{0.3cm}
+    \begin{columns}[T]
+        \begin{column}{0.32\textwidth}
+            \textbf{1. Data Ingestion Layer:} Schema validation \& type casting.
+        \end{column}
+        \begin{column}{0.32\textwidth}
+            \textbf{2. Processing \& ML Layer:} MapReduce chunking \& multi-model training.
+        \end{column}
+        \begin{column}{0.32\textwidth}
+            \textbf{3. Presentation Layer:} Streamlit UI with real-time inference.
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 7: IMPLEMENTATION – MODULES AND TECHNOLOGIES
+% ==============================================================================
+\begin{frame}{Slide 7: Implementation --- Modules \& Technologies}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Core Software Modules}}
                 \begin{itemize}
-                    \item \textbf{Coefficient of Determination ($R^2$):}
-                    $$R^2 = 1 - \frac{\sum (y_i - \hat{y}_i)^2}{\sum (y_i - \bar{y})^2}$$
-                    \item \textbf{Root Mean Squared Error (RMSE):}
-                    $$\text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^n (y_i - \hat{y}_i)^2}$$
+                    \item \texttt{src/data\_loader.py}: Ingestion and distributed MapReduce chunking engine.
+                    \item \texttt{src/preprocessing.py}: Data cleaning, median imputation, IQR outliers, feature engineering, and scaling.
+                    \item \texttt{src/ml\_models.py}: ML suite (Regression, Classification, K-Means, and Real-Time Predictor).
+                    \item \texttt{src/bda\_analytics.py}: Multi-dimensional OLAP rollups and Demographic Vulnerability Index (DVI).
+                    \item \texttt{app.py}: Full Streamlit interactive dashboard.
                 \end{itemize}
             \end{block}
         \end{column}
         \begin{column}{0.48\textwidth}
-            \begin{block}{\textbf{Model Benchmark Results}}
+            \begin{block}{\textbf{Technology Stack}}
+                \begin{itemize}
+                    \item \textbf{Core Language:} Python 3.13
+                    \item \textbf{Data Processing:} Pandas 2.3, NumPy 2.2
+                    \item \textbf{Machine Learning:} Scikit-learn 1.9 (Regression, Ensembles, Clustering, PCA)
+                    \item \textbf{Visualization:} Plotly 7.1 (Dynamic charts, maps, heatmaps, matrices)
+                    \item \textbf{Web Framework:} Streamlit 1.64 \& Streamlit Option Menu
+                    \item \textbf{Version Control \& Cloud:} Git, GitHub, Streamlit Community Cloud
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 8: RESULTS, SCREENSHOTS AND PERFORMANCE
+% ==============================================================================
+\begin{frame}{Slide 8: Results, Benchmarks \& Performance}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{\textbf{Supervised Regression Benchmarks}}
                 \begin{table}[h]
                     \centering
-                    \small
+                    \scriptsize
                     \begin{tabular}{@{}lccc@{}}
                         \toprule
                         \textbf{Algorithm} & \textbf{$R^2$ Score} & \textbf{RMSE} & \textbf{MAE} \\ \midrule
@@ -328,34 +272,10 @@
                     \end{tabular}
                 \end{table}
             \end{block}
-            \begin{exampleblock}{\textbf{Insight}}
-                Decision Trees captured non-linear threshold effects of senior age brackets with highest precision.
-            \end{exampleblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{9. Supervised Classification: Risk Tier Categorization}
-    \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-            \begin{block}{\textbf{Formulation \& Target Classes}}
-                Categorize demographic cohort into 3 discrete risk tiers:
-                $$C \in \{\text{Low Risk},\, \text{Moderate Risk},\, \text{High Risk}\}$$
-                Optimized using Cross-Entropy Loss:
-                $$\mathcal{L} = -\sum_{k=1}^K y_k \log(\hat{p}_k)$$
-            \end{block}
-            \begin{block}{\textbf{Evaluation Metrics}}
-                \begin{itemize}
-                    \item Accuracy, Precision, Recall, and Weighted F1-Score:
-                    $$\text{F1} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$$
-                \end{itemize}
-            \end{block}
-        \end{column}
-        \begin{column}{0.48\textwidth}
-            \begin{block}{\textbf{Classifier Performance Benchmarking}}
+            \begin{block}{\textbf{Supervised Classification Benchmarks}}
                 \begin{table}[h]
                     \centering
-                    \small
+                    \scriptsize
                     \begin{tabular}{@{}lccc@{}}
                         \toprule
                         \textbf{Algorithm} & \textbf{Accuracy} & \textbf{Precision} & \textbf{F1} \\ \midrule
@@ -365,37 +285,46 @@
                     \end{tabular}
                 \end{table}
             \end{block}
-            \begin{exampleblock}{\textbf{Confusion Matrix Analysis}}
-                Decision Tree showed high diagonal concentration, correctly isolating high-risk cohorts with zero false negatives on severe cases.
-            \end{exampleblock}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Unsupervised Clustering \& PCA ($k=3$)}}
+                \begin{itemize}
+                    \item \textbf{PC1 \& PC2:} Account for $>65\%$ feature variance.
+                    \item \textbf{Cluster 0 (Senior High-Risk):} Peak rates ($>75/100\text{k}$).
+                    \item \textbf{Cluster 1 (Working Age):} Large aggregate case volume.
+                    \item \textbf{Cluster 2 (Youth/Female):} Lowest vulnerability baseline.
+                \end{itemize}
+            \end{block}
+            \begin{block}{\textbf{Dashboard Capabilities}}
+                \begin{itemize}
+                    \item Live What-If inference with probability charts.
+                    \item Interactive MapReduce latency: $<5\text{ ms}$.
+                \end{itemize}
+            \end{block}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{10. Unsupervised ML: K-Means Clustering \& 2D PCA}
+% ==============================================================================
+% SLIDE 9: TESTING AND VALIDATION
+% ==============================================================================
+\begin{frame}{Slide 9: Testing and Validation}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-            \begin{block}{\textbf{K-Means Clustering Formulation}}
-                Partition $n$ demographic observations into $k$ clusters minimizing intra-cluster variance:
-                $$\arg\min_S \sum_{i=1}^k \sum_{x \in S_i} \| x - \mu_i \|^2$$
-                Evaluated across $k \in \{2, 3, 4\}$.
-            \end{block}
-            \begin{block}{\textbf{Dimensionality Reduction (2D PCA)}}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Unit \& Integration Testing}}
                 \begin{itemize}
-                    \item Projects multi-hot demographic vectors into 2 principal components.
-                    \item PC1 \& PC2 capture over \textbf{65\%} of cumulative feature variance for planar visualization.
+                    \item \textbf{End-to-End Pipeline Verification:} Automated testing of raw data loading $\rightarrow$ cleansing $\rightarrow$ feature engineering $\rightarrow$ ML training.
+                    \item \textbf{Cache \& Hash Safety:} Validated unhashable argument handling in Streamlit caching.
+                    \item \textbf{Headless Execution Testing:} Validated headless server operations with zero syntax or runtime errors.
                 \end{itemize}
             \end{block}
         \end{column}
         \begin{column}{0.48\textwidth}
-            \begin{block}{\textbf{Derived Cluster Profiles ($k=3$)}}
+            \begin{block}{\textbf{Statistical \& Model Validation}}
                 \begin{itemize}
-                    \item \textbf{Cluster 0 (High-Vulnerability Senior):}
-                    Cohorts aged 75+, highest rates/100k, predominantly male.
-                    \item \textbf{Cluster 1 (High-Volume Working Cohort):}
-                    Ages 25--54, high absolute incident counts due to population scale.
-                    \item \textbf{Cluster 2 (Low-Risk Youth \& Female):}
-                    Ages 15--24 and female demographics with lowest rates/100k.
+                    \item \textbf{Stratified Splitting:} Train/Test holdout evaluation ($75:25$ split) to prevent data leakage.
+                    \item \textbf{Confusion Matrix Inspection:} Verified high true-positive diagonal concentration on high-risk cohorts.
+                    \item \textbf{Cross-Browser UI Testing:} Verified complete rendering across all 7 dashboard views using automated browser subagent testing.
                 \end{itemize}
             \end{block}
         \end{column}
@@ -403,96 +332,52 @@
 \end{frame}
 
 % ==============================================================================
-% SECTION 6: STREAMLIT DASHBOARD PLATFORM
+% SLIDE 10: LIMITATIONS AND FUTURE SCOPE
 % ==============================================================================
-\section{Streamlit Dashboard Platform}
-
-\begin{frame}{11. Interactive Streamlit Dashboard Architecture}
+\begin{frame}{Slide 10: Limitations and Future Scope}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-            \begin{block}{\textbf{Platform Architecture}}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textbf{Current Project Limitations}}
                 \begin{itemize}
-                    \item \textbf{Modern UI:} Glassmorphic cards, custom gradient metrics, and responsive sidebar navigation.
-                    \item \textbf{Plotly Visualizations:} Interactive line trends, donut charts, heatmaps, scatter plots, and confusion matrices.
-                    \item \textbf{Live MapReduce Studio:} Interactive chunk size selection and benchmark execution.
-                \end{itemize}
-            \end{block}
-            \begin{block}{\textbf{Real-Time What-If Prediction Engine}}
-                \begin{itemize}
-                    \item User selects Country, Sex, Age Bracket, Year, and Population.
-                    \item Instant model inference producing rate, total cases, and visual risk badge.
+                    \item \textbf{Sample Scope:} Current dataset subset focuses on 3 nations (India, USA, Japan) across 2012--2016.
+                    \item \textbf{Economic Homogeneity:} Limited variance in annual HDI/GDP in sample slice requires broader historical datasets for full macroeconomic regression.
+                    \item \textbf{Tabular Focus:} Lacks qualitative clinical records or mental health sentiment feeds.
                 \end{itemize}
             \end{block}
         \end{column}
         \begin{column}{0.48\textwidth}
-            \begin{block}{\textbf{The 7 Dashboard Sections}}
-                \begin{enumerate}
-                    \item \textbf{Overview \& KPIs:} Executive summary cards.
-                    \item \textbf{BDA Preprocessing:} Pipeline, profiling, and MapReduce.
-                    \item \textbf{Exploratory Analytics:} Dynamic filters and OLAP.
-                    \item \textbf{ML Supervised Models:} Regression and classification.
-                    \item \textbf{Unsupervised Clustering:} PCA projection and profiles.
-                    \item \textbf{What-If Predictor:} Live inference playground.
-                    \item \textbf{BDA Documentation:} Reports and CSV data export.
-                \end{enumerate}
+            \begin{block}{\textbf{Future Enhancements}}
+                \begin{itemize}
+                    \item \textbf{Apache Spark \& Hadoop Cluster:} Deploy PySpark RDDs/DataFrames on Hadoop YARN to scale to hundreds of millions of records.
+                    \item \textbf{Real-Time Kafka Streaming:} Ingest live hospital emergency logs and distress helpline call feeds.
+                    \item \textbf{Deep Learning \& NLP:} Deploy Transformer models (BERT) for social media crisis sentiment analysis.
+                    \item \textbf{MLOps Pipeline:} Continuous model retraining and data drift monitoring via MLflow.
+                \end{itemize}
             \end{block}
         \end{column}
     \end{columns}
 \end{frame}
 
 % ==============================================================================
-% SECTION 7: CONCLUSIONS & FUTURE WORK
+% SLIDE 11: CONCLUSION
 % ==============================================================================
-\section{Conclusions \& Future Scope}
-
-\begin{frame}{12. Key Conclusions \& Public Health Insights}
+\begin{frame}{Slide 11: Conclusion}
     \begin{columns}[T]
         \begin{column}{0.5\textwidth}
-            \begin{block}{\textbf{Key Project Takeaways}}
+            \begin{block}{\textbf{Summary of Contributions}}
                 \begin{itemize}
-                    \item \textbf{End-to-End BDA Execution:} Successfully unified data ingestion, schema profiling, MapReduce simulation, and ML.
-                    \item \textbf{Predictive Efficacy:} Decision Tree algorithms demonstrated high predictive performance ($R^2 = 0.929$, Accuracy $= 87.5\%$).
-                    \item \textbf{Full Deployment:} Packaged into an interactive web dashboard running locally and deployable to cloud.
+                    \item Successfully designed and implemented an end-to-end \textbf{Big Data Analytics platform} from raw CSV ingestion to predictive deployment.
+                    \item Demonstrated core BDA paradigms: automated data profiling, IQR outlier bounds, and distributed \textbf{MapReduce} simulations.
+                    \item Achieved strong predictive performance with Decision Tree models ($R^2 = 0.929$, Accuracy $= 87.5\%$).
                 \end{itemize}
             \end{block}
         \end{column}
         \begin{column}{0.48\textwidth}
-            \begin{block}{\textbf{Actionable Policy Recommendations}}
+            \begin{block}{\textbf{Actionable Societal Impact}}
                 \begin{itemize}
-                    \item \textbf{Senior Citizen Focus:} Prioritize mental healthcare screening and social support programs for seniors ($75+$ years).
-                    \item \textbf{Targeted Male Interventions:} Develop stigma-free mental health support aimed at working-age males.
-                    \item \textbf{Regional Resource Allocation:} Deploy crisis intervention teams tailored to demographic risk tiers.
-                \end{itemize}
-            \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{13. Future Enhancements for Big Data Scale}
-    \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-            \begin{block}{\textbf{1. Apache Spark \& Hadoop Deployment}}
-                \begin{itemize}
-                    \item Scale pipeline to hundreds of millions of records using PySpark RDDs and DataFrames.
-                    \item Deploy on Hadoop YARN / AWS EMR cluster.
-                \end{itemize}
-            \end{block}
-            \begin{block}{\textbf{2. Streaming Ingestion Pipeline}}
-                \begin{itemize}
-                    \item Implement Apache Kafka for real-time ingestion of hospital and helpline incident logs.
-                \end{itemize}
-            \end{block}
-        \end{column}
-        \begin{column}{0.48\textwidth}
-            \begin{block}{\textbf{3. Advanced Multimodal ML / Deep Learning}}
-                \begin{itemize}
-                    \item Integrate NLP models (BERT, RoBERTa) to analyze public social media sentiment and helpline call transcripts.
-                    \item Graph Neural Networks (GNNs) for modeling socioeconomic contagion effects.
-                \end{itemize}
-            \end{block}
-            \begin{block}{\textbf{4. Continuous MLOps Lifecycle}}
-                \begin{itemize}
-                    \item Automated model retraining with MLflow and drift detection.
+                    \item \textbf{Senior Citizen Vulnerability:} Highlighted critical vulnerability in elderly cohorts ($75+$ years), demonstrating urgent need for targeted geriatric mental health support.
+                    \item \textbf{Gender Disparity:} Identified consistent male vulnerability excess ($2.5\times$--$4\times$).
+                    \item \textbf{Practical Tool:} Delivers a functional web tool enabling health organizations to simulate intervention impacts.
                 \end{itemize}
             \end{block}
         \end{column}
@@ -500,23 +385,21 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 14: THANK YOU & Q&A
+% SLIDE 12: REFERENCES
 % ==============================================================================
-\begin{frame}[plain]
-    \begin{center}
-        \vspace{1.5cm}
-        {\Huge \textbf{\textcolor{DeepNavy}{Thank You!}}}
-        
-        \vspace{0.8cm}
-        {\Large \textbf{Questions \& Discussion}}
-        
-        \vspace{1.2cm}
-        \begin{tabular}{rl}
-            \textbf{Project Repository:} & \url{https://github.com/Ayush-R-s/Achu-BDA} \\
-            \textbf{Interactive Dashboard:} & Streamlit Cloud / \texttt{http://localhost:8501} \\
-            \textbf{Course:} & Big Data Analytics (BDA)
-        \end{tabular}
-    \end{center}
+\begin{frame}{Slide 12: References}
+    \begin{enumerate}
+        \item World Health Organization (WHO), \textit{Preventing Suicide: A Global Imperative}, WHO Guidelines \& Statistical Reports, Geneva, 2021.
+        \item J. Dean and S. Ghemawat, ``MapReduce: Simplified Data Processing on Large Clusters,'' \textit{Communications of the ACM}, vol. 51, no. 1, pp. 107--113, 2008.
+        \item F. Pedregosa et al., ``Scikit-learn: Machine Learning in Python,'' \textit{Journal of Machine Learning Research}, vol. 12, pp. 2825--2830, 2011.
+        \item W. McKinney, ``Data Structures for Statistical Computing in Python (pandas),'' \textit{Proceedings of the 9th Python in Science Conference}, pp. 56--61, 2010.
+        \item Streamlit Inc., \textit{Streamlit Documentation and Cloud Deployment Architecture}, \url{https://docs.streamlit.io/}, 2025.
+        \item Kaggle \& United Nations Development Programme (UNDP), \textit{Human Development Index (HDI) and Global Socioeconomic Indicators Dataset}, 2022.
+    \end{enumerate}
+    
+    \vspace{0.3cm}
+    \centering
+    \textbf{Project Repository:} \url{https://github.com/Ayush-R-s/Achu-BDA}
 \end{frame}
 
 \end{document}
